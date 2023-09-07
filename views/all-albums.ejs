@@ -1,0 +1,22 @@
+<div class="nav">
+    <h1>Albums</h1>
+    <a href="/" id="home-link">Home</a>
+  </div>
+  
+  <div class="main-albums">
+    <% if (albums.length > 0) { %> <% albums.forEach(album => { %>
+    <div class="album-card">
+      <% if (album.images.length > 0) { %>
+      <img src="<%= album.images[1].url %>" alt="Album Cover" />
+      <% } else { %>
+      <img src="/images/default-cover-art" alt="Default Image" />
+      <% } %>
+      <h2><%= album.name %></h2>
+      <% if (album.images.length > 0) { %>
+      <a href="/tracks/<%= album.id %>" class="button-42">View Tracks</a>
+      <% } %>
+    </div>
+    <% }) %> <% } %>
+  </div>
+
+  
