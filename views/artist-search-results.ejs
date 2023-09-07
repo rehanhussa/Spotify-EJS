@@ -1,6 +1,21 @@
-<div class="column">
-    <h1><%= artist.name %></h1>
-    <img src="<%= artist.images[1].url %>" alt="<%= artist.name %>" />
-    <a href="/all-albums/<%= artist.id %>">Go to the Albums</a>
+<div class="artists-container">
+    <% if (artists && artists.length > 0) { %>
+        <% artists.forEach((artist) => { %>
+            <div class="column">
+                <h1><%= artist.name %></h1>
+
+                <% if (artist.images && artist.images[1]) { %>
+                    <img src="<%= artist.images[1].url %>" alt="<%= artist.name %>" />
+                <% } else { %>
+                    <p>No image available</p>
+                <% } %>
+
+                <a href="/all-albums/<%= artist.id %>">Go to the Albums</a>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>No artists found</p>
+    <% } %>
+
     <a href="/">Home</a>
-  </div>
+</div>
