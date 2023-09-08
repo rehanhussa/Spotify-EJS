@@ -21,3 +21,16 @@
     <p>No preview available</p>
   </figure>
   <% } %> <% }) %>
+
+  <form action="/reviews/album/<%= albumId %>" method="POST">
+    <textarea name="content" placeholder="Your review"></textarea>
+    <input type="number" name="rating" placeholder="Rating (1-5)">
+    <input type="submit" value="Submit Review">
+  </form>
+
+  <% reviews.forEach(review => { %> 
+    <div class="review">
+      <p><%= review.content %></p>
+      <p>Rating: <%= review.rating %></p>
+    </div>
+  <% }) %>

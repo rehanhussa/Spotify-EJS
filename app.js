@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const reviewRoutes = require('./routes/reviews');
+const Review = require('./models/review');
 
 passport.use(
   new SpotifyStrategy(
@@ -106,11 +107,12 @@ app.get('/callback', (req, res) => {
 });
 
 // Set up middleware
+app.use(express.json()); // to parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // to parse form data
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json()); // to parse JSON request bodies
 app.use('/reviews', reviewRoutes);
 
 // Configure Spotify API
@@ -212,9 +214,10 @@ app.get("/tracks/:albumId", async (req, res) => {
 
   try {
     const data = await spotifyApi.getAlbumTracks(albumId);
+    const reviews = await Review.find({ albumId: albumId });
     const tracks = data.body.items;
     const pageTitle = "Songs";
-    res.render("track-information", { tracks, pageTitle, pageStyling });
+    res.render("track-information", { tracks, pageTitle, pageStyling, albumId, reviews });
   } catch (error) {
     console.log("There has been an error:", error);
   }
@@ -262,8 +265,14 @@ app.post('/save-favorite-artist', async (req, res) => {
 });
 
 
+
+
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
   console.log(`Betterify Running on ${port} 🎧`)
 );
+
+module.exports = {
+  spotifyApi
+}

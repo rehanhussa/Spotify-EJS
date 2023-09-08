@@ -11,9 +11,17 @@ exports.getAllReviews = async (req, res) => {
 
 exports.createReview = async (req, res) => {
     try {
-        const review = new Review(req.body);
+        const albumId = req.params.id;
+        const reviewData = {
+            albumId,
+            content: req.body.content,
+            rating: req.body.rating
+        }
+
+        const review = new Review(reviewData);
         await review.save();
-        res.status(201).json(review);
+
+        res.redirect(`/tracks/${albumId}`);
     } catch (err) {
         res.status(500).send(err);
     }
@@ -21,7 +29,7 @@ exports.createReview = async (req, res) => {
 
 exports.getReviewById = async (req, res) => {
     try {
-        const review = await Review.findById(req.params.id);
+        const review = await Review.findById(req.body.id);
         if (!review) return res.status(404).send();
         res.json(review);
     } catch (err) {
@@ -31,7 +39,7 @@ exports.getReviewById = async (req, res) => {
 
 exports.updateReview = async (req, res) => {
     try {
-        const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const review = await Review.findByIdAndUpdate(req.body.id, req.body, { new: true });
         if (!review) return res.status(404).send();
         res.json(review);
     } catch (err) {
@@ -41,7 +49,7 @@ exports.updateReview = async (req, res) => {
 
 exports.deleteReview = async (req, res) => {
     try {
-        const review = await Review.findByIdAndDelete(req.params.id);
+        const review = await Review.findByIdAndDelete(req.body.id);
         if (!review) return res.status(404).send();
         res.json(review);
     } catch (err) {
