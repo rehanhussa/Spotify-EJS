@@ -1,88 +1,94 @@
 body {
-    background-image: url(/images/spotify-background.jpeg);
-    background-size: cover;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    font-family: "Montserrat", sans-serif;
-  }
-  
-  .search-bar {
-    background-color: #242424;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
-    padding: 10px 20px;
-    width: 300px;
-    font-size: 16px;
-    font-weight: 600;
-    outline: none;
-    transition: background-color 0.3s ease;
-    position: absolute;
-    top: 64%; /* Adjust as necessary; 50% would be the center */
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .search-bar::placeholder {
-    color: #fff;
-    opacity: 0.7;
-  }
-  
-  .search-bar:focus {
-    background-color: #9e3524;
-  }
-  
-  .search-bar:hover {
-    background-color: #9e3524;
-    cursor: pointer;
-  }
-  
-  h1 {
-    font-size: 5rem;
-    margin-bottom: 2rem;
-    font-weight: bolder;
-  }
+  background-image: url(/images/spotify-background.jpeg);
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  font-family: "Montserrat", sans-serif;
+  background-position: center center;
+}
+
+.search-bar {
+  background-color: #242424;
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  padding: 10px 20px;
+  width: 300px;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  top: 200px; /* Adjust as necessary; 50% would be the center */
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.search-bar::placeholder {
+  color: #fff;
+  opacity: 0.7;
+}
+
+.search-bar:focus {
+  background-color: #9e3524;
+}
+
+.search-bar:hover {
+  background-color: #9e3524;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 5rem;
+  margin-bottom: 2rem;
+  font-weight: bolder;
+}
 
 /* Default styles (desktop-first approach) */
 body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
+font-family: 'Arial', sans-serif;
+margin: 0;
+padding: 0;
 }
 
 /* ... other styles ... */
 
 /* Mobile styles */
 @media only screen and (max-width: 768px) {
-  body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;  /* Horizontally center content */
-    justify-content: center;  /* Vertically center content, if desired */
-    height: 100vh;  /* This ensures the body takes the full viewport height, useful if you're trying to vertically center as well */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* Horizontally center content */
+  justify-content: center;  /* Vertically center content, if desired */
+  height: 100vh;  /* This ensures the body takes the full viewport height, useful if you're trying to vertically center as well */
+  background-image: url(/images/spotify-background.jpeg);
+  background-position: top center; 
+}
 
-  }
+/* If you have a navigation menu, you might want to make it stack vertically on mobile: */
+nav ul {
+    display: block;
+}
 
-  /* If you have a navigation menu, you might want to make it stack vertically on mobile: */
-  nav ul {
-      display: block;
-  }
+nav li {
+    display: block;
+    margin-right: 0; /* Remove right margin if you have it set for desktop */
+}
 
-  nav li {
-      display: block;
-      margin-right: 0; /* Remove right margin if you have it set for desktop */
-  }
+/* If you have any multi-column layouts, you can stack them on mobile: */
+.column {
+    width: 100%;
+    float: none;
+}
+.search-bar {
+  top: 50%;  /* Center it vertically on mobile */
 
-  /* If you have any multi-column layouts, you can stack them on mobile: */
-  .column {
-      width: 100%;
-      float: none;
-  }
+}
 
-  /* ... add other mobile-specific styles ... */
+/* ... add other mobile-specific styles ... */
 }

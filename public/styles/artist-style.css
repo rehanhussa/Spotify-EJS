@@ -1,15 +1,22 @@
 body {
   background-image: url(/images/spotify-background.jpeg);
   background-size: cover;
-  height: auto;
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
-  overflow-y: auto;
-  
+}
+
+.artists-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 40px;
+    align-content: center;
 }
 
 .column {
@@ -28,7 +35,7 @@ body {
   font-weight: 900;
   font-size: 4rem;
   color: #000;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
 }
 
 .column a {
@@ -57,4 +64,42 @@ body {
     margin-top: 2rem;
     font-weight: bold;
     /* any other styling properties you want to add */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 10px;
+  text-align: center;
+}
+
+.modal-close {
+  background-color: #000;
+  color: #128643;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.modal-content h4 {
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center;
 }

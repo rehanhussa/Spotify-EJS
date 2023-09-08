@@ -10,6 +10,7 @@ const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
+const reviewRouter = require('./routes/reviewsRoutes');
 
 passport.use(
   new SpotifyStrategy(
@@ -109,6 +110,8 @@ app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json()); // to parse JSON request bodies
+app.use(reviewRouter);
 
 // Configure Spotify API
 const spotifyApi = new SpotifyWebApi({
@@ -143,6 +146,18 @@ const initApp = async () => {
 
 // Call initialization function
 initApp();
+
+app.get("/some-route", (req, res) => {
+  const pageTitle = "Some Page Title";
+  res.render("someView", { pageTitle });
+});
+
+app.use((req, res, next) => {
+  res.locals.pageTitle = "Default Title";
+  next();
+});
+
+
 
 // Define routes
 app.get("/", (req, res) => {
@@ -225,6 +240,24 @@ app.put('/playlist/:playlistId', async (req, res) => {
   } catch (error) {
       console.error('Error updating playlist:', error);
       res.status(500).send({ message: 'Error updating playlist' });
+  }
+});
+
+app.post('/save-favorite-artist', async (req, res) => {
+  const { userId, artistName } = req.body;
+
+  try {
+    let userPref = await UserPreference.findOne({ userId });
+    if (!userPref) {
+      userPref = new UserPreference({ userId, favoriteArtists: [artistName] });
+    } else {
+      userPref.favoriteArtists.push(artistName);
+    }
+    await userPref.save();
+    res.status(200).send({ message: 'Artist saved successfully' });
+  } catch (error) {
+    console.error('Error saving artist:', error);
+    res.status(500).send({ message: 'Error saving artist' });
   }
 });
 

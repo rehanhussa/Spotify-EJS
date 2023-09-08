@@ -1,6 +1,6 @@
 <div class="artists-container">
     <% if (artists && artists.length > 0) { %>
-        <% artists.slice(0, 5).forEach((artist) => { %>
+        <% artists.slice(0, 4).forEach((artist) => { %>
             <div class="column">
                 <h1><%= artist.name %></h1>
 
@@ -14,8 +14,26 @@
             </div>
         <% }); %>
     <% } else { %>
-        <p>No artists found</p>
-    <% } %>
+        <!-- Modal Structure -->
+        <div id="noArtistModal" class="modal">
+            <div class="modal-content">
+                <h4>No Artists Found</h4>
+                <p>We couldn't find any artists matching your search. Please try again with a different search term.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="/" class="modal-close">Home</a>
+            </div>
+        </div>
+        <script>
+            // Show the modal when there are no artists found
+            const modal = document.getElementById('noArtistModal');
+            modal.style.display = 'block';
 
-    <a href="/">Home</a>
+            // Close the modal when the "Home" button is clicked
+            const closeModalBtn = document.querySelector('.modal-close');
+            closeModalBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        </script>
+    <% } %>
 </div>
