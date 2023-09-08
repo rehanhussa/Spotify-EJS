@@ -10,7 +10,7 @@ const app = express();
 const mongoose = require('mongoose');
 const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
-const reviewRouter = require('./routes/reviewsRoutes');
+const reviewRoutes = require('./routes/reviews');
 
 passport.use(
   new SpotifyStrategy(
@@ -111,7 +111,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json()); // to parse JSON request bodies
-app.use(reviewRouter);
+app.use('/reviews', reviewRoutes);
 
 // Configure Spotify API
 const spotifyApi = new SpotifyWebApi({

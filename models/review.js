@@ -1,21 +1,10 @@
 const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    rating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
-    }
+    content: String,
+    rating: Number,
+    author: String, // or an ObjectId if linked to a user model
+    // any other fields you want
 });
 
-const Review = mongoose.model('Review', reviewSchema);
-module.exports = Review;
+module.exports = mongoose.model('Review', reviewSchema);
