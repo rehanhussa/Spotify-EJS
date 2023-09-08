@@ -1,6 +1,6 @@
 <div class="artists-container">
     <% if (artists && artists.length > 0) { %>
-        <% artists.forEach((artist) => { %>
+        <% artists.slice(0, 5).forEach((artist) => { %>
             <div class="column">
                 <h1><%= artist.name %></h1>
 

@@ -8,6 +8,35 @@ const axios = require('axios');
 const querystring = require('querystring');
 const app = express();
 const mongoose = require('mongoose');
+const passport = require('passport');
+const SpotifyStrategy = require('passport-spotify').Strategy;
+
+passport.use(
+  new SpotifyStrategy(
+    {
+      clientID: 'YOUR_SPOTIFY_CLIENT_ID',
+      clientSecret: 'YOUR_SPOTIFY_CLIENT_SECRET',
+      callbackURL: 'http://localhost:3000/callback'
+    },
+    function(accessToken, refreshToken, expires_in, profile, done) {
+      // Save user data into a database or any storage system you're using
+      return done(null, profile);
+    }
+  )
+);
+
+app.get('/login', passport.authenticate('spotify', {
+  scope: ['user-read-email', 'user-read-private'],
+  showDialog: true
+}));
+
+app.get('/callback',
+  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect to your desired page.
+    res.redirect('/');
+  }
+);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -175,6 +204,30 @@ app.get("/tracks/:albumId", async (req, res) => {
     console.log("There has been an error:", error);
   }
 });
+
+app.delete('/playlist/:playlistId', async (req, res) => {
+  const playlistId = req.params.playlistId;
+  try {
+      await spotifyApi.unfollowPlaylist(playlistId);
+      res.status(200).send({ message: 'Playlist deleted successfully' });
+  } catch (error) {
+      console.error('Error deleting playlist:', error);
+      res.status(500).send({ message: 'Error deleting playlist' });
+  }
+});
+
+app.put('/playlist/:playlistId', async (req, res) => {
+  const playlistId = req.params.playlistId;
+  const { name, description } = req.body; // Assuming you send the updated name and description in the request body
+  try {
+      await spotifyApi.changePlaylistDetails(playlistId, { name, description });
+      res.status(200).send({ message: 'Playlist updated successfully' });
+  } catch (error) {
+      console.error('Error updating playlist:', error);
+      res.status(500).send({ message: 'Error updating playlist' });
+  }
+});
+
 
 // Start the server
 const port = 3000;
