@@ -88,8 +88,11 @@ nav li {
     float: none;
 }
 .search-bar {
-  top: 50%;  /* Center it vertically on mobile */
-
+  position: absolute; /* or fixed, depending on your needs */
+  /* top: 0;
+  left: 0;
+  width: 100%; /* make it full width */
+  /* z-index: 1000; ensure it's above other elements */ 
 }
 
 /* ... add other mobile-specific styles ... */
