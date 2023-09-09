@@ -39,13 +39,13 @@ exports.getReviewById = async (req, res) => {
 };
 
 exports.updateReview = async (req, res) => {
-
     const { id, albumId } = req.params;
+    const { content, rating } = req.body;
 
     try {
-        const review = await Review.findByIdAndUpdate(id, albumId, { new: true });
+        const review = await Review.findByIdAndUpdate(id, { content, rating }, { new: true });
         if (!review) return res.status(404).send();
-        res.json(review);
+        res.redirect(`/tracks/${albumId}`);
     } catch (err) {
         res.status(500).send(err);
     }
