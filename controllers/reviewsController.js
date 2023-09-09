@@ -12,6 +12,7 @@ exports.getAllReviews = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         const albumId = req.params.id;
+
         const reviewData = {
             albumId,
             content: req.body.content,
@@ -38,8 +39,11 @@ exports.getReviewById = async (req, res) => {
 };
 
 exports.updateReview = async (req, res) => {
+
+    const { id, albumId } = req.params;
+
     try {
-        const review = await Review.findByIdAndUpdate(req.body.id, req.body, { new: true });
+        const review = await Review.findByIdAndUpdate(id, albumId, { new: true });
         if (!review) return res.status(404).send();
         res.json(review);
     } catch (err) {
@@ -50,9 +54,11 @@ exports.updateReview = async (req, res) => {
 
 exports.deleteReview = async (req, res) => {
     try {
-        const review = await Review.findByIdAndDelete(req.body.id);
+        const { id, albumId } = req.params;
+
+        const review = await Review.findByIdAndDelete(id);
         if (!review) return res.status(404).send();
-        res.json(review);
+        res.redirect(`/tracks/${albumId}`);
     } catch (err) {
         res.status(500).send(err);
     }

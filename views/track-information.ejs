@@ -1,36 +1,78 @@
 
-<div class="nav"><h1>Songs</h1>
-    <div id="navigation"><a href="/" class="home-button">Home</a><form>
-      <input class="home-button" type="button" value="Go back to albums" onclick="history.back()">
-    </form></div></div>
-  
-  <div class="info-bar">
-    <h2>Title</h2>
-    <h2>Listen</h2>
-  </div>
-  
-  
-  
-  <% tracks.forEach(track => { %>
-  <figure class="song-preview">
-    <% if (track.preview_url) { %>
-    <figcaption><%= track.name %></figcaption>
-    <audio controls src="<%= track.preview_url %>"></audio>
-  </figure>
-    <% } else { %>
-    <p>No preview available</p>
-  </figure>
-  <% } %> <% }) %>
-
-  <form action="/reviews/album/<%= albumId %>" method="POST">
-    <textarea name="content" placeholder="Your review"></textarea>
-    <input type="number" name="rating" placeholder="Rating (1-5)">
-    <input type="submit" value="Submit Review">
-  </form>
-
-  <% reviews.forEach(review => { %> 
-    <div class="review">
-      <p><%= review.content %></p>
-      <p>Rating: <%= review.rating %></p>
+  <div class="nav"><h1>Songs</h1>
+      <div id="navigation"><a href="/" class="home-button">Home</a><form>
+        <input class="home-button" type="button" value="Go back to albums" onclick="history.back()">
+      </form></div></div>
+    
+    <div class="info-bar">
+      <h2>Title</h2>
+      <h2>Listen</h2>
     </div>
+    
+    
+    
+    <% tracks.forEach(track => { %>
+    <figure class="song-preview">
+      <% if (track.preview_url) { %>
+      <figcaption><%= track.name %></figcaption>
+      <audio controls src="<%= track.preview_url %>"></audio>
+    </figure>
+      <% } else { %>
+      <p>No preview available</p>
+    </figure>
+    <% } %> <% }) %>
+
+    <form action="/reviews/album/<%= albumId %>" method="POST">
+      <textarea name="content" placeholder="Your review"></textarea>
+      <input type="number" name="rating" placeholder="Rating (1-5)">
+      <input type="submit" value="Submit Review">
+    </form>
+
+    <% reviews.forEach(review => { %> 
+      <form action="/reviews/<%= review._id %>/album/<%= albumId %>?_method=DELETE" method="POST" class="review">
+        <p><%= review.content %></p>
+        <p>Rating: <%= review.rating %></p>
+        <input type="submit" value="Delete Review"></input>
+        <input type="button" value="EDIT Review" class="edit-btn" data-dialog-id="editReviewDialog-<%= review._id %>">
+      </form>
+    
+      <dialog id="editReviewDialog-<%= review._id %>">
+        <h2>Edit Review</h2>
+        <form action="/reviews/<%= review._id %>/album/<%= albumId %>?_method=PUT" method="POST" id="editReviewForm">
+          <textarea name="content" placeholder="Your review"><%= review.content %></textarea>
+          <input type="number" name="rating" placeholder="Rating (1-5)" value="<%= review.rating %>">
+          <input type="submit" value="Submit Edited Review">
+        </form>
+        <button class="close-dialog">Close</button>
+      </dialog>
   <% }) %>
+    <script>
+      const modal = document.getElementById('editReviewModal');
+      const closeBtn = document.querySelector('.close');
+
+  // Open the dialog
+document.querySelectorAll('.edit-btn').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const dialogId = btn.getAttribute('data-dialog-id');
+    const dialog = document.getElementById(dialogId);
+    dialog.showModal();
+  });
+});
+
+// Close the dialog
+document.querySelectorAll('.close-dialog').forEach(closeBtn => {
+  closeBtn.addEventListener('click', (e) => {
+    const dialog = e.target.closest('dialog');
+    dialog.close();
+  });
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('dialog[open]').forEach(dialog => {
+      dialog.close();
+    });
+  }
+});
+    </script>

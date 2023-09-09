@@ -12,6 +12,7 @@ const passport = require('passport');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const reviewRoutes = require('./routes/reviews');
 const Review = require('./models/review');
+const methodOverride = require('method-override')
 
 passport.use(
   new SpotifyStrategy(
@@ -113,6 +114,7 @@ app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(methodOverride('_method'))
 app.use('/reviews', reviewRoutes);
 
 // Configure Spotify API
