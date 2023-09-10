@@ -232,3 +232,9 @@ body {
       width: 90%; /* Adjust dialog width for mobile */
   }
 }
+
+@media only screen and (max-width: 768px) { /* This targets screens with a width of 768 pixels or less (typically mobile devices) */
+  .info-bar {
+      display: none; /* This hides the element */
+  }
+}

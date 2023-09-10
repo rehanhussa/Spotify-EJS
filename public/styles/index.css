@@ -95,5 +95,8 @@ nav li {
   /* z-index: 1000; ensure it's above other elements */ 
 }
 
-/* ... add other mobile-specific styles ... */
+.info-bar {
+  display: none; /* This hides the element */
 }
+}
+/* ... add other mobile-specific styles ... */
