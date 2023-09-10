@@ -12,6 +12,25 @@ body {
   background-position: center center;
 }
 
+.spotify-login-button {
+  position: absolute;  /* This takes the div out of the normal flow and positions it relative to the nearest positioned ancestor. */
+  top: 0;              /* This positions the div at the very top of its container. */
+  right: 0;            /* This positions the div at the very right of its container. */
+  z-index: 1000;       /* This ensures the div stays on top of other elements. */
+}
+
+a img {
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+a:hover img {
+  opacity: 0.7;
+}
+
+
+
 .search-bar {
   background-color: #242424;
   border: none;
@@ -56,6 +75,17 @@ margin: 0;
 padding: 0;
 }
 
+#backgroundVideo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+}
+
+
 
 
 /* ... other styles ... */
@@ -70,6 +100,10 @@ body {
   height: 100vh;  /* This ensures the body takes the full viewport height, useful if you're trying to vertically center as well */
   background-image: url(/images/spotify-background.jpeg);
   background-position: top center; 
+}
+
+#backgroundVideo {
+  display: none;  /* This hides the video on mobile devices */
 }
 
 /* If you have a navigation menu, you might want to make it stack vertically on mobile: */

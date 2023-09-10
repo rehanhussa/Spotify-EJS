@@ -13,12 +13,13 @@ const SpotifyStrategy = require('passport-spotify').Strategy;
 const reviewRoutes = require('./routes/reviews');
 const Review = require('./models/review');
 const methodOverride = require('method-override')
+const session = require('express-session');
 
 passport.use(
   new SpotifyStrategy(
     {
-      clientID: 'YOUR_SPOTIFY_CLIENT_ID',
-      clientSecret: 'YOUR_SPOTIFY_CLIENT_SECRET',
+      clientID: process.env.CLIENT_ID, // Replaced 'CLIENT_ID'
+      clientSecret: process.env.CLIENT_SECRET, // Replaced 'CLIENT_SECRET'
       callbackURL: 'http://localhost:3000/callback'
     },
     function(accessToken, refreshToken, expires_in, profile, done) {
@@ -28,18 +29,13 @@ passport.use(
   )
 );
 
-app.get('/login', passport.authenticate('spotify', {
-  scope: ['user-read-email', 'user-read-private'],
-  showDialog: true
+
+app.use(session({
+  secret: 'CLIENT_SECRET', // This is a secret key for your session. You can set it to any string value.
+  resave: false,
+  saveUninitialized: true,
 }));
 
-app.get('/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect to your desired page.
-    res.redirect('/');
-  }
-);
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -56,56 +52,61 @@ let redirect_uri =
   process.env.REDIRECT_URI || 
   'http://localhost:3000/callback';
 
-app.get('/login', (req, res) => {
-    res.redirect('https://accounts.spotify.com/authorize?' +
-      querystring.stringify({
-        response_type: 'code',
-        client_id: process.env.CLIENT_ID,
-        scope: 'user-read-private user-read-email',
-        redirect_uri
-      }));
+app.get('/login', passport.authenticate('spotify', {
+  scope: ['user-read-email', 'user-read-private'],
+  showDialog: true
+}));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
 
-app.get('/callback', (req, res) => {
-    let code = req.query.code || null;
-
-    let authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer.from(
-          process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
-        ).toString('base64')),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      json: true
-    };
-
-    axios({
-      method: 'post',
-      url: authOptions.url,
-      data: querystring.stringify(authOptions.form),
-      headers: authOptions.headers
-    }).then(response => {
-      var access_token = response.data.access_token;
-      var refresh_token = response.data.refresh_token;
-
-      return axios({
-        method: 'get',
-        url: 'https://api.spotify.com/v1/me',
-        headers: { 'Authorization': 'Bearer ' + access_token }
-      });
-    }).then(response => {
-      console.log(response.data);
-      res.redirect('/your-redirect-url');
-    }).catch(error => {
-      console.error('Error:', error);
-    });
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
 });
+
+
+
+// app.get('/callback', (req, res) => {
+//     let code = req.query.code || null;
+
+//     let authOptions = {
+//       url: 'https://accounts.spotify.com/api/token',
+//       form: {
+//         code: code,
+//         redirect_uri,
+//         grant_type: 'authorization_code'
+//       },
+//       headers: {
+//         'Authorization': 'Basic ' + (new Buffer.from(
+//           process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
+//         ).toString('base64')),
+//         'Content-Type': 'application/x-www-form-urlencoded'
+//       },
+//       json: true
+//     };
+
+//     axios({
+//       method: 'post',
+//       url: authOptions.url,
+//       data: querystring.stringify(authOptions.form),
+//       headers: authOptions.headers
+//     }).then(response => {
+//       var access_token = response.data.access_token;
+//       var refresh_token = response.data.refresh_token;
+
+//       return axios({
+//         method: 'get',
+//         url: 'https://api.spotify.com/v1/me',
+//         headers: { 'Authorization': 'Bearer ' + access_token }
+//       });
+//     }).then(response => {
+//       console.log(response.data);
+//       res.redirect('/your-redirect-url');
+//     }).catch(error => {
+//       console.error('Error:', error);
+//     });
+// });
 
 // Set up middleware
 app.use(express.json()); // to parse JSON request bodies
@@ -116,6 +117,22 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride('_method'))
 app.use('/reviews', reviewRoutes);
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/login', passport.authenticate('spotify', {
+  scope: ['user-read-email', 'user-read-private'],
+  showDialog: true
+}));
+
+app.get('/callback',
+  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect to your desired page.
+    res.redirect('/');
+  }
+);
 
 // Configure Spotify API
 const spotifyApi = new SpotifyWebApi({
