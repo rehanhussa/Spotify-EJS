@@ -1,7 +1,7 @@
 
   <div class="nav"><h1>Songs</h1>
       <div id="navigation"><a href="/" class="home-button">Home</a><form>
-        <input class="home-button" type="button" value="Go back to albums" onclick="history.back()">
+        <input class="home-button" type="button" value="Albums" onclick="history.back()">
       </form></div></div>
     
     <div class="info-bar">
@@ -33,7 +33,7 @@
         <p><%= review.content %></p>
         <p>Rating: <%= review.rating %></p>
         <input type="submit" value="Delete Review"></input>
-        <input type="button" value="EDIT Review" class="edit-btn" data-dialog-id="editReviewDialog-<%= review._id %>">
+        <input type="button" value="Edit Review" class="edit-btn" data-dialog-id="editReviewDialog-<%= review._id %>">
       </form>
     
       <dialog id="editReviewDialog-<%= review._id %>">

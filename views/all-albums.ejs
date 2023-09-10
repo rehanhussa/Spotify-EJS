@@ -5,7 +5,7 @@
 
 <div class="main-albums">
   <% if (albums.length > 0) { %> 
-    <% albums.slice(0, 5).forEach(album => { %>
+    <% albums.slice(0, 4).forEach(album => { %>
   <div class="album-card">
     <% if (album.images.length > 0) { %>
     <img src="<%= album.images[1].url %>" alt="Album Cover" />
