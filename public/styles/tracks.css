@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Helvetica', sans-serif;
   background-color: #f4f4f4;
   margin: 0;
   padding: 0;
@@ -60,6 +60,7 @@ input.home-button {
   background-color: #00000057; /* Black background */
   color: #000000; /* White text */
   border-radius: 40px; /* Added border radius */
+  font-family: 'Montserrat', sans-serif;
 }
 
 .song-preview audio {
@@ -102,12 +103,14 @@ textarea, input[type="number"] {
 }
 
 dialog {
-  background-color: #fff;
+  /* background-color: #fff;
   border-radius: 5px;
   padding: 20px;
   width: 80%;
   max-width: 500px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
 }
 
 .close-dialog {
@@ -217,6 +220,7 @@ body {
 
   .song-preview {
       flex-direction: column; /* Stack song details vertically */
+      font-family: 'Montserrat', sans-serif;
   }
 
   .song-preview audio {
